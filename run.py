@@ -1,9 +1,10 @@
+import os
 from sagemaker.session import Session
 from sagemaker.mxnet import MXNet
 import boto3
 
 # role for sagemaker
-role = "arn:aws:iam::305047569515:role/service-role/AmazonSageMaker-ExecutionRole-20220818T095999"
+role = os.environ["ROLE_ARN"]
 
 # s3 bucket for saving code and model artifacts
 bucket = Session().default_bucket()
@@ -44,8 +45,3 @@ MXNet(
     instance_count=1,
     instance_type="",
 )
-
-
-
-
-
