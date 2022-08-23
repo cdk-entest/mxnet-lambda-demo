@@ -6,3 +6,8 @@ config.json
 **node_modules
 **config.json
 **package
+**.gitgnore
+**.npmignore
+**jest.config.js
+**package-lock.json
+**test
