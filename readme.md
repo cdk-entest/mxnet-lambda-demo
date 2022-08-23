@@ -1,5 +1,7 @@
 ## Deploy a mxnet model by lambda
 
+- pros: simple, least management, low cost
+- cons: cold start as the ecr image size about 500MB
 - mxnet mnist dataset
 - build and train a simple mxnet nn model locally
 - upload the model (params) to s3
