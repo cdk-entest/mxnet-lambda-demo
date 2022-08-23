@@ -1,37 +1,25 @@
-import sys
+"""
+15 aug 2022 haimtran 
+mxnet mnist train and save model locally
+"""
 from mxnet import nd
 import mxnet as mx
-from multiprocess import cpu_count
 from mxnet import nd
 from mxnet.gluon import nn
 from mxnet import autograd
 
 
-def test_dataloader():
-    # cpu count
-    print(f"cpu count {cpu_count()}")
-    X = mx.random.uniform(shape=(10, 3))
-    y = mx.random.uniform(shape=(10, 1))
-    dataset = mx.gluon.data.dataset.ArrayDataset(X, y)
-    data_loader = mx.gluon.data.DataLoader(
-        dataset,
-        batch_size=5,
-        num_workers=cpu_count(),
-    )
-    print(sys.getsizeof(data_loader))
-    # actual data
-    for X_batch, y_batch in data_loader:
-        print(
-            f"X_bach has shape {X_batch.shape} and y_batch shape {y_batch.shape}"
-        )
-        print(y_batch)
-
-
 def data_xform(data):
+    """
+    transform data
+    """
     return nd.moveaxis(data, 2, 0).astype("float32") / 255.0
 
 
 def load_data():
+    """
+    create dataloader
+    """
     # load data
     train_data = mx.gluon.data.vision.MNIST(train=True).transform_first(
         data_xform
@@ -48,13 +36,13 @@ def load_data():
     val_loader = mx.gluon.data.DataLoader(
         val_data, shuffle=False, batch_size=batch_size
     )
-    # print actual data
-    # for x, y in train_loader:
-    #     print(y)
     return train_loader, val_loader
 
 
-def build_model():
+def create_model():
+    """
+    create a model nn
+    """
     net = nn.Sequential()
     with net.name_scope():
         net.add(
@@ -67,10 +55,14 @@ def build_model():
 
 
 def train_model():
+    """
+    train the model
+    """
+
     # create the modle
-    net = build_model()
+    net = create_model()
     # init parameters
-    ctx = mx.gpu(0) if mx.context.num_gpus() > 0 else mx.cpu(0)
+    ctx = mx.gpu(0) if mx.context.num_gpus() > 0 else [mx.cpu(0), mx.cpu(1)]
     net.initialize(mx.init.Xavier(), ctx=ctx)
     # trainer
     trainer = mx.gluon.Trainer(
@@ -81,8 +73,8 @@ def train_model():
     # loss
     metric = mx.metric.Accuracy()
     loss_function = mx.gluon.loss.SoftmaxCrossEntropyLoss()
-    # training data
-    train_loader, label_loader = load_data()
+    # training
+    train_loader, _ = load_data()
     #
     num_epochs = 10
     for epoch in range(num_epochs):
@@ -103,9 +95,41 @@ def train_model():
         name, acc = metric.get()
         print(f"after epoch {epoch+1} :  {name} = {acc}")
         metric.reset()
+    # save model
+    net.save_parameters("net.params")
+
+
+def predict():
+    """
+    load model from params and predict
+    """
+    #
+    metric = mx.metric.Accuracy()
+    # context
+    ctx = mx.gpu(0) if mx.context.num_gpus() > 0 else mx.cpu(0)
+    # load val data
+    _, val_data = load_data()
+    # create the model again
+    net = create_model()
+    # load model with pre-trained params
+    net.load_parameters("net.params")
+    # predict
+    outputs = []
+    for inputs, labels in val_data:
+        inputs = inputs.as_in_context(ctx)
+        labels = labels.as_in_context(ctx)
+        # predict
+        pred = net(inputs)
+        # print
+        print(f"input: {inputs} and output: {pred}")
+        metric.update(labels, pred)
+        outputs.append(net(inputs))
+        break
+    # print(f"validation {metric.get()} ")
 
 
 if __name__ == "__main__":
     # test_dataloader()
-    load_data()
-    train_model()
+    # load_data()
+    # train_model()
+    predict()
