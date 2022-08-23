@@ -74,9 +74,24 @@ export class DeployStack extends cdk.Stack {
         {
           proxy: true,
           allowTestInvoke: false,
-          credentialsRole: role
+          credentialsRole: role,
+          passthroughBehavior: cdk.aws_apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+          requestTemplates: {},
+          requestParameters: {},
+          integrationResponses: [
+            {
+              statusCode: "200"
+            }
+          ]
         }
-      )
+      ),
+      {
+        methodResponses: [
+          {
+            statusCode: "200"
+          }
+        ]
+      }
     )
   }
 }
