@@ -64,12 +64,13 @@ def train(
     current_host,
     model_dir,
 ):
+    # where data and model stored
     checkpoints_dir = "/opt/ml/checkpoints"
     checkpoints_enabled = os.path.exists(checkpoints_dir)
-
+    # load training data
     (train_labels, train_images) = load_data(training_channel)
     (test_labels, test_images) = load_data(testing_channel)
-    # Data parallel training - shard the data so each host
+    # data parallel training - shard the data so each host
     # only trains on a subset of the total data.
     shard_size = len(train_images) // len(hosts)
     for i, host in enumerate(hosts):
@@ -90,6 +91,7 @@ def train(
 
     kvstore = "local" if len(hosts) == 1 else "dist_sync"
 
+    # import module as mod so here it is
     mlp_model = mx.mod.Module(
         symbol=build_graph(), context=get_training_context(num_gpus)
     )
@@ -181,7 +183,6 @@ def neo_preprocess(payload, content_type):
 def neo_postprocess(result):
     import json
     import logging
-
     import numpy as np
 
     logging.info("Invoking user-defined post-processing function")

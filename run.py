@@ -37,11 +37,3 @@ test_data_location = f"s3://sagemaker-sample-data-{region}/mxnet/mnist/test"
 
 # fit model
 mnist_estimator.fit({"train": train_data_location, "test": test_data_location})
-
-MXNet(
-    entry_point="",
-    framework_version="",
-    py_version="",
-    instance_count=1,
-    instance_type="",
-)
