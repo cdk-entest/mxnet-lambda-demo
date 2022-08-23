@@ -3,3 +3,6 @@ config.json
 .vscode
 **.png
 **.gz
+**node_modules
+**config.json
+**package
