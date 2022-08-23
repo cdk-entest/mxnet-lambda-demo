@@ -116,8 +116,9 @@ def predict():
     # predict
     outputs = []
     for inputs, labels in val_data:
-        inputs = inputs.as_in_context(ctx)
-        labels = labels.as_in_context(ctx)
+        # gpu option
+        # inputs = inputs.as_in_context(ctx)
+        # labels = labels.as_in_context(ctx)
         # predict
         pred = net(inputs)
         # print
@@ -128,8 +129,19 @@ def predict():
     # print(f"validation {metric.get()} ")
 
 
+def test_load_data():
+    """
+    test load data
+    """
+    _, val_data = load_data()
+    for inputs, labels in val_data:
+        print(inputs)
+        break
+
+
 if __name__ == "__main__":
     # test_dataloader()
     # load_data()
     # train_model()
-    predict()
+    # predict()
+    test_load_data()
