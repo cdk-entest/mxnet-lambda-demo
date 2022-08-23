@@ -56,36 +56,11 @@ export class DeployStack extends cdk.Stack {
     resource.addMethod(
       "GET",
       new cdk.aws_apigateway.LambdaIntegration(func, {
-        proxy: false,
+        proxy: true,
         allowTestInvoke: false,
         credentialsRole: role,
-        passthroughBehavior:
-          cdk.aws_apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
-        requestTemplates: {
-          "application/json": fs.readFileSync(
-            path.resolve(
-              __dirname,
-              "./../../mxnet-lambda/lambda-request-template"
-            ),
-            {
-              encoding: "utf-8",
-            }
-          ),
-        },
-        requestParameters: {},
-        integrationResponses: [
-          {
-            statusCode: "200",
-          },
-        ],
-      }),
-      {
-        methodResponses: [
-          {
-            statusCode: "200",
-          },
-        ],
       }
+      ),
     );
   }
 }

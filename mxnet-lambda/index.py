@@ -1,4 +1,5 @@
 import os
+import json
 import boto3
 import mxnet as mx
 from mxnet.gluon import nn
@@ -26,8 +27,25 @@ def handler(event, context):
     net.load_parameters(
             filename="/tmp/model_params"
             )
+    # parse request  
+    # image_url = event['params']['querystring']['image_url']
+    # read image 
+    # image = mx.image.imread(filename=image_url)
+    # transform image 
+    # image = image 
+    # model predict  
+    # pred = net(image)
+    # softmax output 
+
     # prediction
     return {
-            "statusCode": "200",
-            "message": "hello mxnet"
-            }
+        'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Methods": "OPTIONS,GET"
+        },
+        'body': json.dumps({
+            'message': f'{event}'
+        })
+    }
