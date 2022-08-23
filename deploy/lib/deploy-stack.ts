@@ -62,7 +62,7 @@ export class DeployStack extends cdk.Stack {
         passthroughBehavior:
           cdk.aws_apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
         requestTemplates: {
-          "applcation/json": fs.readFileSync(
+          "application/json": fs.readFileSync(
             path.resolve(
               __dirname,
               "./../../mxnet-lambda/lambda-request-template"
