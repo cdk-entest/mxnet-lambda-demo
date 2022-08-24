@@ -21,7 +21,7 @@ s3.meta.client.download_file(
     Filename="/tmp/model_params",
 )
 
-
+# create a nn model
 def create_model():
     """
     create a nn model
@@ -37,6 +37,7 @@ def create_model():
     return net
 
 
+# read image from file
 def read_image(image_url):
     """
     read image from s3 and transform to mxnet format

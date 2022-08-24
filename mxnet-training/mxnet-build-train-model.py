@@ -1,7 +1,8 @@
 """
-15 aug 2022 haimtran 
+haimtran 
 mxnet mnist train and save model locally
 """
+
 from mxnet import nd
 import mxnet as mx
 from mxnet import nd
@@ -62,7 +63,7 @@ def train_model():
     # create the modle
     net = create_model()
     # init parameters
-    ctx = mx.gpu(0) if mx.context.num_gpus() > 0 else [mx.cpu(0), mx.cpu(1)]
+    ctx = mx.gpu(0) if mx.context.num_gpus() > 0 else mx.cpu(0)
     net.initialize(mx.init.Xavier(), ctx=ctx)
     # trainer
     trainer = mx.gluon.Trainer(
