@@ -13,4 +13,7 @@ config.json
 **test
 run.py 
 mnist.py
+mxnet-sagemaker
+data
+
 
