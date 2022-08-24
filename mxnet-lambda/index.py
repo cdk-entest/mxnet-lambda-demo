@@ -10,6 +10,7 @@ import mxnet as mx
 from mxnet.gluon import nn
 import numpy as np
 
+
 # s3 client
 s3 = boto3.resource("s3")
 
@@ -93,7 +94,7 @@ def handler(event, context):
 # local test
 if __name__ == "__main__":
     resp = handler(
-        event={"queryStringParameters": {"image_url": "images/image-1.png"}},
+        event={"queryStringParameters": {"image_url": "images/image-1.jpg"}},
         context=None,
     )
     print(resp)

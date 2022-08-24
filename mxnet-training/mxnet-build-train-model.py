@@ -138,7 +138,7 @@ def read_mnist_images():
     for images, _ in val_data:
         image = images[0][0].asnumpy()
         plt.imshow(image, cmap="gray")
-        plt.imsave(f"image-{k}.png", image, cmap="gray")
+        plt.imsave(f"./../data/image-{k}.png", image, cmap="gray")
         k = k + 1
         if k > 10:
             break
@@ -148,7 +148,7 @@ def load_image_from_file():
     """
     use open cv to read image
     """
-    image = mx.image.imread("image-2.png", 0)
+    image = mx.image.imread("./../data/image-2.png", 0)
     image = mx.image.imresize(image, 28, 28)
     image = image.transpose((2, 0, 1))
     image = image.astype(dtype="float32")
@@ -173,5 +173,5 @@ def test_local_image():
 
 
 if __name__ == "__main__":
-    test_local_image()
-    # read_mnist_images()
+    # test_local_image()
+    read_mnist_images()
