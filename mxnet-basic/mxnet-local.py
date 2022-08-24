@@ -167,5 +167,5 @@ if __name__ == "__main__":
     # load_data()
     # train_model()
     # predict()
-    # test_load_data()
-    test_local_image()
+    test_load_data()
+    # test_local_image()
