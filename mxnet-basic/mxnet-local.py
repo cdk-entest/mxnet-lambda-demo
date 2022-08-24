@@ -29,7 +29,6 @@ def load_data():
     val_data = mx.gluon.data.vision.MNIST(train=False).transform_first(
         data_xform
     )
-
     # dataloader - threadpool worker to load (x,y) samples
     batch_size = 100
     train_loader = mx.gluon.data.DataLoader(
@@ -60,7 +59,6 @@ def train_model():
     """
     train the model
     """
-
     # create the modle
     net = create_model()
     # init parameters
@@ -131,25 +129,27 @@ def predict():
     print(f"validation {metric.get()} ")
 
 
-def load_image_from_val_data():
+def read_mnist_images():
     """
     read image
     """
     _, val_data = load_data()
+    k = 0
     for images, _ in val_data:
-        print(images[0])
         image = images[0][0].asnumpy()
-        plt.imshow(image)
-        # plt.savefig(f"image-{0}.png")
-        break
-    return images[0]
+        plt.imshow(image, cmap="gray")
+        plt.imsave(f"image-{k}.png", image, cmap="gray")
+        k = k + 1
+        if k > 10:
+            break
 
 
 def load_image_from_file():
     """
     use open cv to read image
     """
-    image = mx.image.imread("img_1.jpg", 0)
+    image = mx.image.imread("image-2.png", 0)
+    image = mx.image.imresize(image, 28, 28)
     image = image.transpose((2, 0, 1))
     image = image.astype(dtype="float32")
     return image
@@ -159,7 +159,6 @@ def test_local_image():
     """
     read image and test locally
     """
-
     # create model
     net = create_model()
     # load model
@@ -175,3 +174,4 @@ def test_local_image():
 
 if __name__ == "__main__":
     test_local_image()
+    # read_mnist_images()
