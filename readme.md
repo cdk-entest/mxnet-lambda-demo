@@ -4,8 +4,10 @@
 - cons: cold start as the ecr image size about 500MB
 - mxnet mnist dataset
 - build and train a simple mxnet nn model locally
-- upload the model (params) to s3
+- upload the model (params) to a s3 bucket
 - deploy the model into lambda and apigaw
+
+![mxnet-lambda](https://user-images.githubusercontent.com/20411077/186332154-6557b7dd-2ee7-4c20-9bbc-f889669f190b.png)
 
 ## Lambda processing code
 
