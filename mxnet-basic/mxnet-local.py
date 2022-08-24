@@ -7,6 +7,7 @@ import mxnet as mx
 from mxnet import nd
 from mxnet.gluon import nn
 from mxnet import autograd
+import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -123,21 +124,35 @@ def predict():
         # predict
         pred = net(inputs)
         # print
-        print(f"input: {inputs} and output: {pred}")
+        # print(f"input: {inputs} and output: {pred}")
         metric.update(labels, pred)
         outputs.append(net(inputs))
-        break
-    # print(f"validation {metric.get()} ")
+        # break
+    print(f"validation {metric.get()} ")
 
 
-def test_load_data():
+def load_image_from_val_data():
     """
-    test load data
+    read image
     """
     _, val_data = load_data()
-    for inputs, labels in val_data:
-        print(inputs)
+    for images, _ in val_data:
+        print(images[0])
+        image = images[0][0].asnumpy()
+        plt.imshow(image)
+        # plt.savefig(f"image-{0}.png")
         break
+    return images[0]
+
+
+def load_image_from_file():
+    """
+    use open cv to read image
+    """
+    image = mx.image.imread("img_1.jpg", 0)
+    image = image.transpose((2, 0, 1))
+    image = image.astype(dtype="float32")
+    return image
 
 
 def test_local_image():
@@ -149,23 +164,14 @@ def test_local_image():
     net = create_model()
     # load model
     net.load_parameters("net.params")
-    # load image
-    img = mx.image.imread("zero.png")
-    img = mx.image.imresize(img, 28, 28)
-    img = img.transpose((2, 0, 1))
-    img = img.astype(dtype="float32")
+    # read an image from a file
+    image_val = load_image_from_file()
     # predict
-    pred = net(img)[0]
+    pred = net(image_val)[0]
     pred = pred.asnumpy()
-    #
     temp = dict(zip(np.arange(10), pred))
     print({k: v for k, v in sorted(temp.items(), key=lambda item: item[1])})
 
 
 if __name__ == "__main__":
-    # test_dataloader()
-    # load_data()
-    # train_model()
-    # predict()
-    test_load_data()
-    # test_local_image()
+    test_local_image()

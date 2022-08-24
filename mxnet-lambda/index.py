@@ -93,7 +93,7 @@ def handler(event, context):
 # local test
 if __name__ == "__main__":
     resp = handler(
-        event={"queryStringParameters": {"image_url": "images/image-0.png"}},
+        event={"queryStringParameters": {"image_url": "images/image-1.png"}},
         context=None,
     )
     print(resp)
